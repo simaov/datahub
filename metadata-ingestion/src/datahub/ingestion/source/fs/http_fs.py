@@ -21,6 +21,6 @@ class HttpFileSystem(FileSystem):
         else:
             raise Exception(f"Cannot get file status for the requested path {path}.")
 
-    def list(self, path) -> Iterable[FileStatus]:
+    def list(self, path: str) -> Iterable[FileStatus]:
         status = self.file_status(path)
         return [status]

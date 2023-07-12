@@ -20,14 +20,11 @@ class FileSystem:
         from datahub.ingestion.source.fs import fs_factory
         return fs_factory.get_fs(path)
 
-    def create(self, path: str):
-        raise NotImplementedError()
-
     def open(self, path: str):
         raise NotImplementedError()
 
     def file_status(self, path: str) -> FileStatus:
         raise NotImplementedError()
 
-    def list(self, path) -> Iterable[FileStatus]:
+    def list(self, path: str) -> Iterable[FileStatus]:
         raise NotImplementedError()

@@ -40,7 +40,8 @@ class S3ListIterator(Iterator):
                 MaxKeys=self._max_keys
             )
 
-        assert response['ResponseMetadata']['HTTPStatusCode'] == 200
+        is_ok = response['ResponseMetadata']['HTTPStatusCode'] == 200
+        assert is_ok, f"Failed to fetch S3 object, error message: {response['Error']['Message']}"
 
         self._file_statuses = iter([
             FileStatus(f"s3://{response['Name']}/{x['Key']}", x['Size'], is_file=True)

@@ -6,21 +6,15 @@ import pathlib
 
 class LocalFileSystem(FileSystem):
 
-    def create(self, path: str):
-        raise NotImplementedError()
-
     def open(self, path: str):
         return open(path, "rb")
 
-    def list(self, path) -> Iterable[FileStatus]:
+    def list(self, path: str) -> Iterable[FileStatus]:
         p = pathlib.Path(path)
         if p.is_file():
             return [self.file_status(path)]
         elif p.is_dir():
-            return iter([
-                self.file_status(str(x))
-                for x in p.iterdir()
-            ])
+            return iter([self.file_status(str(x)) for x in p.iterdir()])
         else:
             raise Exception(f"Failed to process {path}")
 

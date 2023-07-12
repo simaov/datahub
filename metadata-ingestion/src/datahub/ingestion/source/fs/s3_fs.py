@@ -6,11 +6,8 @@ from typing import Iterable
 
 
 class S3FileSystem(FileSystem):
-    S3_FILE_SYSTEM_SCHEMA = "s3"
-    _s3 = boto3.client('s3')
 
-    def create(self, path: str):
-        raise NotImplementedError()
+    _s3 = boto3.client('s3')
 
     def open(self, path: str):
         parsed = urlparse(path)
@@ -34,10 +31,11 @@ class S3FileSystem(FileSystem):
             else:
                 raise e
 
-    def list(self, path) -> Iterable[FileStatus]:
+    def list(self, path: str) -> Iterable[FileStatus]:
         parsed = urlparse(path)
         return S3ListIterator(self._s3, parsed.netloc, parsed.path.lstrip('/'))
 
     @staticmethod
     def assert_ok_status(s3_response):
-        assert s3_response['ResponseMetadata']['HTTPStatusCode'] == 200
+        is_ok = s3_response['ResponseMetadata']['HTTPStatusCode'] == 200
+        assert is_ok, f"Failed to fetch S3 object, error message: {s3_response['Error']['Message']}"
