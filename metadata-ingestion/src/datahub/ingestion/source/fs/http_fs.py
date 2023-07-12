@@ -15,7 +15,7 @@ class HttpFileSystem(FileSystem):
     def file_status(self, path: str) -> FileStatus:
         head = requests.head(path)
         if head.ok:
-            return FileStatus(path, head.headers['Content-length'], is_file=True)
+            return FileStatus(path, int(head.headers['Content-length']), is_file=True)
         elif head.status_code == 404:
             raise Exception(f"Requested path {path} does not exists.")
         else:
